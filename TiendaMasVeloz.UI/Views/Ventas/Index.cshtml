@@ -1,0 +1,75 @@
+@model IEnumerable<TiendaMasVeloz.BLL.DTOs.FacturaDTO>
+
+@{
+    ViewData["Title"] = "Ventas";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Ventas</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Lista de Ventas
+            <a asp-action="NuevaVenta" class="btn btn-primary float-end">
+                <i class="fas fa-plus"></i> Nueva Venta
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped" id="ventasTable">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.NumeroFactura)</th>
+                            <th>@Html.DisplayNameFor(model => model.Fecha)</th>
+                            <th>Cliente</th>
+                            <th>Vendedor</th>
+                            <th>@Html.DisplayNameFor(model => model.Total)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.NumeroFactura)</td>
+                                <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@Html.DisplayFor(modelItem => item.NombreCliente)</td>
+                                <td>@Html.DisplayFor(modelItem => item.NombreVendedor)</td>
+                                <td>@item.Total.ToString("C")</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.IdFactura" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.IdFactura" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.IdFactura" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#ventasTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                },
+                order: [[1, 'desc']], // Ordenar por fecha descendente
+                pageLength: 10,
+                responsive: true
+            });
+        });
+    </script>
+} 

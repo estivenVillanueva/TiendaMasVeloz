@@ -1,0 +1,118 @@
+@model TiendaMasVeloz.BLL.DTOs.EmpleadoDTO
+
+@{
+    ViewData["Title"] = "Comisiones del Empleado";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Comisiones del Empleado</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-user me-1"></i>
+            Información del Empleado
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Apellido)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Apellido)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Cedula)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Cedula)</dd>
+
+                <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Cargo)</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Cargo)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-chart-bar me-1"></i>
+            Comisiones por Mes
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="mes">Mes:</label>
+                        <select id="mes" class="form-control">
+                            <option value="1">Enero</option>
+                            <option value="2">Febrero</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="año">Año:</label>
+                        <select id="año" class="form-control">
+                            @for (int i = DateTime.Now.Year; i >= DateTime.Now.Year - 5; i--)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Total Ventas</th>
+                            <th>Comisión (5%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comisionesBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver a la Lista
+    </a>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function cargarComisiones() {
+                var mes = $('#mes').val();
+                var año = $('#año').val();
+                var empleadoId = @Model.IdEmpleado;
+
+                $.get('/Empleados/GetComisiones', { id: empleadoId, mes: mes, año: año }, function (data) {
+                    $('#comisionesBody').empty();
+                    $('#comisionesBody').append(
+                        '<tr>' +
+                        '<td>' + $('#mes option:selected').text() + ' ' + año + '</td>' +
+                        '<td>$' + data.totalVentas.toFixed(2) + '</td>' +
+                        '<td>$' + data.comision.toFixed(2) + '</td>' +
+                        '</tr>'
+                    );
+                });
+            }
+
+            $('#mes, #año').change(cargarComisiones);
+            cargarComisiones();
+        });
+    </script>
+} 

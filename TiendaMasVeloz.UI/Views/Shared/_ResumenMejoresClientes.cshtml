@@ -1,0 +1,158 @@
+@model IEnumerable<TiendaMasVeloz.BLL.DTOs.FacturaDTO>
+
+@{
+    var clientes = Model.Where(f => f.Estado)
+        .GroupBy(f => new { f.IdCliente, f.NombreCliente })
+        .Select(g => new
+        {
+            Id = g.Key.IdCliente,
+            Nombre = g.Key.NombreCliente,
+            ComprasTotales = g.Sum(f => f.Total),
+            CantidadFacturas = g.Count(),
+            PromedioCompra = g.Average(f => f.Total),
+            ProductosComprados = g.Sum(f => f.Detalles.Sum(d => d.Cantidad))
+        })
+        .OrderByDescending(c => c.ComprasTotales)
+        .Take(5)
+        .ToList();
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-users me-1"></i>
+                Top Clientes
+            </div>
+            <div>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="toggleView('clientes')">
+                    <i class="fas fa-chart-pie me-1"></i>
+                    Cambiar Vista
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="clientesTabla">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Cliente</th>
+                            <th class="text-end">Compras Totales</th>
+                            <th class="text-end">Facturas</th>
+                            <th class="text-end">Promedio</th>
+                            <th class="text-end">Productos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cliente in clientes)
+                        {
+                            <tr>
+                                <td>
+                                    <i class="fas fa-user-tie me-1 text-primary"></i>
+                                    @cliente.Nombre
+                                </td>
+                                <td class="text-end">$@cliente.ComprasTotales.ToString("N2")</td>
+                                <td class="text-end">@cliente.CantidadFacturas</td>
+                                <td class="text-end">$@cliente.PromedioCompra.ToString("N2")</td>
+                                <td class="text-end">@cliente.ProductosComprados</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="clientesGrafico" style="display: none;">
+            <canvas id="graficoClientes" style="max-height: 300px;"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleView(tipo) {
+        const tabla = document.getElementById(tipo + 'Tabla');
+        const grafico = document.getElementById(tipo + 'Grafico');
+        
+        if (tabla.style.display === 'none') {
+            tabla.style.display = 'block';
+            grafico.style.display = 'none';
+        } else {
+            tabla.style.display = 'none';
+            grafico.style.display = 'block';
+            initGraficoClientes();
+        }
+    }
+
+    function initGraficoClientes() {
+        const ctx = document.getElementById('graficoClientes');
+        if (!ctx.chart) {
+            const clientes = @Html.Raw(Json.Serialize(clientes.Select(c => new { 
+                nombre = c.Nombre, 
+                compras = c.ComprasTotales,
+                facturas = c.CantidadFacturas,
+                productos = c.ProductosComprados
+            })));
+
+            ctx.chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: clientes.map(c => c.nombre),
+                    datasets: [
+                        {
+                            label: 'Compras Totales',
+                            data: clientes.map(c => c.compras),
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Cantidad Facturas',
+                            data: clientes.map(c => c.facturas),
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Compras Totales ($)'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(2);
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Cantidad Facturas'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script> 

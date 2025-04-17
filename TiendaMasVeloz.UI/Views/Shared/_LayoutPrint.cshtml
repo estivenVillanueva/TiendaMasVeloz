@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Tienda Más Veloz</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Estilos específicos para impresión */
+        @@media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                margin: 0;
+                padding: 15px;
+            }
+
+            .container {
+                width: 100%;
+                max-width: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            /* Asegurar que los elementos de la tabla no se corten entre páginas */
+            tr {
+                page-break-inside: avoid;
+            }
+
+            /* Forzar el fondo blanco y texto negro para ahorro de tinta */
+            body, .table, .card {
+                background-color: white !important;
+                color: black !important;
+            }
+
+            /* Mostrar los enlaces sin subrayado y en negro */
+            a {
+                text-decoration: none !important;
+                color: black !important;
+            }
+
+            /* Asegurar que los bordes de las tablas se impriman */
+            .table-bordered {
+                border: 1px solid #dee2e6 !important;
+            }
+
+            .table-bordered td,
+            .table-bordered th {
+                border: 1px solid #dee2e6 !important;
+            }
+
+            /* Ajustar márgenes y tamaño de fuente para impresión */
+            .container {
+                font-size: 12pt;
+            }
+
+            h1 { font-size: 24pt; }
+            h2 { font-size: 20pt; }
+            h3 { font-size: 16pt; }
+            h4 { font-size: 14pt; }
+            h5 { font-size: 12pt; }
+
+            /* Asegurar que los fondos de los badges se impriman */
+            .badge {
+                border: 1px solid #000 !important;
+                padding: 0.35em 0.65em !important;
+            }
+
+            .badge.bg-success {
+                background-color: #ffffff !important;
+                border-color: #198754 !important;
+                color: #198754 !important;
+            }
+
+            .badge.bg-danger {
+                background-color: #ffffff !important;
+                border-color: #dc3545 !important;
+                color: #dc3545 !important;
+            }
+
+            /* Asegurar que los hr se impriman correctamente */
+            hr {
+                border-top: 1px solid #000 !important;
+                margin: 1rem 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    @await RenderSectionAsync("Buttons", required: false)
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> 

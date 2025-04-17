@@ -1,0 +1,71 @@
+@model TiendaMasVeloz.BLL.DTOs.ProductoDTO
+
+@{
+    ViewData["Title"] = "Eliminar Producto";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Eliminar Producto</h1>
+
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            ¿Está seguro de que desea eliminar este producto?
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Descripcion)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CategoriaNombre)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.CategoriaNombre)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PrecioVenta)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.PrecioVenta)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Stock)</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-@(Model.Stock > 10 ? "success" : (Model.Stock > 0 ? "warning" : "danger"))">
+                                @Model.Stock unidades
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Activo)</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-@(Model.Activo ? "success" : "danger")">
+                                @(Model.Activo ? "Activo" : "Inactivo")
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-circle"></i> Advertencia</h5>
+                        <p>Esta acción eliminará permanentemente el producto del sistema. Esta operación no se puede deshacer.</p>
+                        @if (Model.Stock > 0)
+                        {
+                            <p class="mb-0 text-danger">
+                                <strong>¡Atención!</strong> Este producto aún tiene @Model.Stock unidades en stock.
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="IdProducto" />
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Confirmar Eliminación
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista
+                </a>
+            </form>
+        </div>
+    </div>
+</div> 

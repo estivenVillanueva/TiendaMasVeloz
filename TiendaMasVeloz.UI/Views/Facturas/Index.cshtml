@@ -1,0 +1,94 @@
+@model IEnumerable<TiendaMasVeloz.BLL.DTOs.FacturaDTO>
+
+@{
+    ViewData["Title"] = "Facturas";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Facturas</h1>
+
+    <p>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Crear Nueva Factura
+        </a>
+        <a asp-action="ReporteVentas" class="btn btn-success">
+            <i class="fas fa-chart-line"></i> Reporte de Ventas
+        </a>
+    </p>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Lista de Facturas
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.NumeroFactura)</th>
+                        <th>@Html.DisplayNameFor(model => model.Fecha)</th>
+                        <th>Cliente</th>
+                        <th>Vendedor</th>
+                        <th>@Html.DisplayNameFor(model => model.Subtotal)</th>
+                        <th>@Html.DisplayNameFor(model => model.IVA)</th>
+                        <th>@Html.DisplayNameFor(model => model.Total)</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.NumeroFactura)</td>
+                            <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@Html.DisplayFor(modelItem => item.NombreCliente)</td>
+                            <td>@Html.DisplayFor(modelItem => item.NombreVendedor)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Subtotal)</td>
+                            <td>@Html.DisplayFor(modelItem => item.IVA)</td>
+                            <td>
+                                <span class="fw-bold">
+                                    @Html.DisplayFor(modelItem => item.Total)
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-@(item.Estado ? "success" : "danger")">
+                                    @(item.Estado ? "Activa" : "Anulada")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Details" asp-route-id="@item.IdFactura" class="btn btn-info btn-sm">
+                                        <i class="fas fa-info-circle"></i> Detalles
+                                    </a>
+                                    <a asp-action="DetalleFactura" asp-route-id="@item.IdFactura" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-file-invoice"></i> Ver Factura
+                                    </a>
+                                    @if (item.Estado)
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@item.IdFactura" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-ban"></i> Anular
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.table').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                },
+                order: [[1, 'desc']] // Ordenar por fecha descendente por defecto
+            });
+        });
+    </script>
+} 

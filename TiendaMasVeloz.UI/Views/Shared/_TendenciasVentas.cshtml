@@ -1,0 +1,186 @@
+@model IEnumerable<TiendaMasVeloz.BLL.DTOs.FacturaDTO>
+
+@{
+    // Calcular ventas del período actual y anterior
+    var fechaFin = ViewBag.FechaFin is DateTime ? (DateTime)ViewBag.FechaFin : DateTime.Today;
+    var fechaInicio = ViewBag.FechaInicio is DateTime ? (DateTime)ViewBag.FechaInicio : fechaFin.AddDays(-30);
+    var duracionPeriodo = (fechaFin - fechaInicio).Days;
+    var fechaInicioAnterior = fechaInicio.AddDays(-duracionPeriodo);
+
+    var ventasActuales = Model.Where(f => f.Estado && f.Fecha >= fechaInicio && f.Fecha <= fechaFin);
+    var ventasAnteriores = Model.Where(f => f.Estado && f.Fecha >= fechaInicioAnterior && f.Fecha < fechaInicio);
+
+    // Métricas del período actual
+    var totalVentasActual = ventasActuales.Sum(f => f.Total);
+    var promedioVentaActual = ventasActuales.Any() ? totalVentasActual / ventasActuales.Count() : 0;
+    var cantidadFacturasActual = ventasActuales.Count();
+    var productosVendidosActual = ventasActuales.Sum(f => f.Detalles.Sum(d => d.Cantidad));
+
+    // Métricas del período anterior
+    var totalVentasAnterior = ventasAnteriores.Sum(f => f.Total);
+    var promedioVentaAnterior = ventasAnteriores.Any() ? totalVentasAnterior / ventasAnteriores.Count() : 0;
+    var cantidadFacturasAnterior = ventasAnteriores.Count();
+    var productosVendidosAnterior = ventasAnteriores.Sum(f => f.Detalles.Sum(d => d.Cantidad));
+
+    // Calcular variaciones
+    var variacionVentas = totalVentasAnterior == 0 ? (totalVentasActual > 0 ? 100 : 0) : ((totalVentasActual - totalVentasAnterior) / totalVentasAnterior) * 100;
+    var variacionPromedio = promedioVentaAnterior == 0 ? (promedioVentaActual > 0 ? 100 : 0) : ((promedioVentaActual - promedioVentaAnterior) / promedioVentaAnterior) * 100;
+    var variacionFacturas = cantidadFacturasAnterior == 0 ? (cantidadFacturasActual > 0 ? 100 : 0) : ((cantidadFacturasActual - cantidadFacturasAnterior) / (double)cantidadFacturasAnterior) * 100;
+    var variacionProductos = productosVendidosAnterior == 0 ? (productosVendidosActual > 0 ? 100 : 0) : ((productosVendidosActual - productosVendidosAnterior) / (double)productosVendidosAnterior) * 100;
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-chart-line me-1"></i>
+                Tendencias de Ventas
+            </div>
+            <div class="small text-muted">
+                Comparación con período anterior (@fechaInicioAnterior.ToString("dd/MM/yyyy") - @fechaInicio.AddDays(-1).ToString("dd/MM/yyyy"))
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card border-left-primary h-100">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Ventas
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">$@totalVentasActual.ToString("N2")</div>
+                                <div class="mt-2 @(variacionVentas >= 0 ? "text-success" : "text-danger")">
+                                    <i class="fas fa-@(variacionVentas >= 0 ? "arrow-up" : "arrow-down")"></i>
+                                    @Math.Abs(variacionVentas).ToString("N1")%
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card border-left-success h-100">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Promedio por Venta
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">$@promedioVentaActual.ToString("N2")</div>
+                                <div class="mt-2 @(variacionPromedio >= 0 ? "text-success" : "text-danger")">
+                                    <i class="fas fa-@(variacionPromedio >= 0 ? "arrow-up" : "arrow-down")"></i>
+                                    @Math.Abs(variacionPromedio).ToString("N1")%
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calculator fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card border-left-info h-100">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    Cantidad de Facturas
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">@cantidadFacturasActual</div>
+                                <div class="mt-2 @(variacionFacturas >= 0 ? "text-success" : "text-danger")">
+                                    <i class="fas fa-@(variacionFacturas >= 0 ? "arrow-up" : "arrow-down")"></i>
+                                    @Math.Abs(variacionFacturas).ToString("N1")%
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card border-left-warning h-100">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Productos Vendidos
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold">@productosVendidosActual</div>
+                                <div class="mt-2 @(variacionProductos >= 0 ? "text-success" : "text-danger")">
+                                    <i class="fas fa-@(variacionProductos >= 0 ? "arrow-up" : "arrow-down")"></i>
+                                    @Math.Abs(variacionProductos).ToString("N1")%
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-box fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="progress-metrics">
+                    <div class="metric mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">Progreso hacia meta mensual ($@((totalVentasAnterior > 0 ? totalVentasAnterior * 1.1m : totalVentasActual).ToString("N2")))</span>
+                            <span class="small">@(totalVentasAnterior > 0 ? Math.Min(100, (totalVentasActual / (totalVentasAnterior * 1.1m) * 100)).ToString("N1") : "100")%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-primary" role="progressbar" 
+                                 style="width: @(totalVentasAnterior > 0 ? Math.Min(100, (totalVentasActual / (totalVentasAnterior * 1.1m) * 100)) : 100)%">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="small">Progreso en cantidad de ventas (@cantidadFacturasAnterior)</span>
+                            <span class="small">@(cantidadFacturasAnterior > 0 ? Math.Min(100, ((double)cantidadFacturasActual / cantidadFacturasAnterior * 100)).ToString("N1") : "100")%</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: @(cantidadFacturasAnterior > 0 ? Math.Min(100, ((double)cantidadFacturasActual / cantidadFacturasAnterior * 100)) : 100)%">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-left-primary {
+        border-left: 4px solid #4e73df !important;
+    }
+    .border-left-success {
+        border-left: 4px solid #1cc88a !important;
+    }
+    .border-left-info {
+        border-left: 4px solid #36b9cc !important;
+    }
+    .border-left-warning {
+        border-left: 4px solid #f6c23e !important;
+    }
+    .text-xs {
+        font-size: .7rem;
+    }
+    .text-gray-300 {
+        color: #dddfeb !important;
+    }
+</style> 

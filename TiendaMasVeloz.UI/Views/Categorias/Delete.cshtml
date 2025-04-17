@@ -1,0 +1,48 @@
+@model TiendaMasVeloz.BLL.DTOs.CategoriaDTO
+
+@{
+    ViewData["Title"] = "Eliminar Categoría";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        ¿Está seguro que desea eliminar esta categoría?
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Descripcion)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Activo)</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-@(Model.Activo ? "success" : "danger")">
+                                @(Model.Activo ? "Activa" : "Inactiva")
+                            </span>
+                        </dd>
+                    </dl>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

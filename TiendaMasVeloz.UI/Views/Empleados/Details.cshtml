@@ -1,0 +1,71 @@
+@model TiendaMasVeloz.BLL.DTOs.EmpleadoDTO
+
+@{
+    ViewData["Title"] = "Detalles del Empleado";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Detalles del Empleado</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-user me-1"></i>
+            Información del Empleado
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Nombre Completo</dt>
+                        <dd class="col-sm-8">@Model.NombreCompleto</dd>
+
+                        <dt class="col-sm-4">Cédula</dt>
+                        <dd class="col-sm-8">@Model.Cedula</dd>
+
+                        <dt class="col-sm-4">Cargo</dt>
+                        <dd class="col-sm-8">@Model.Cargo</dd>
+
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">@Model.Email</dd>
+
+                        <dt class="col-sm-4">Teléfono</dt>
+                        <dd class="col-sm-8">@Model.Telefono</dd>
+
+                        <dt class="col-sm-4">Dirección</dt>
+                        <dd class="col-sm-8">@Model.Direccion</dd>
+
+                        <dt class="col-sm-4">Estado</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Activo)
+                            {
+                                <span class="badge bg-success">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Inactivo</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Fecha de Creación</dt>
+                        <dd class="col-sm-8">@Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        @if (Model.FechaModificacion.HasValue)
+                        {
+                            <dt class="col-sm-4">Última Modificación</dt>
+                            <dd class="col-sm-8">@Model.FechaModificacion.Value.ToString("dd/MM/yyyy HH:mm")</dd>
+                        }
+                    </dl>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.IdEmpleado" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div> 

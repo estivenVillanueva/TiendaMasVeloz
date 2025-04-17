@@ -1,0 +1,96 @@
+@model TiendaMasVeloz.BLL.DTOs.FacturaDTO
+
+@{
+    ViewData["Title"] = "Anular Factura";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Anular Factura</h1>
+
+    <div class="card mb-4">
+        <div class="card-header bg-danger text-white">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            ¿Está seguro de que desea anular esta factura?
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="card-title">Información de la Factura</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Número de Factura:</dt>
+                        <dd class="col-sm-8">#@Model.NumeroFactura</dd>
+
+                        <dt class="col-sm-4">Fecha:</dt>
+                        <dd class="col-sm-8">@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                        <dt class="col-sm-4">Cliente:</dt>
+                        <dd class="col-sm-8">@Model.NombreCliente</dd>
+
+                        <dt class="col-sm-4">Vendedor:</dt>
+                        <dd class="col-sm-8">@Model.NombreVendedor</dd>
+
+                        <dt class="col-sm-4">Total:</dt>
+                        <dd class="col-sm-8">
+                            <span class="fw-bold">$@Model.Total.ToString("N2")</span>
+                        </dd>
+                    </dl>
+
+                    <h5 class="card-title mt-4">Productos</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var detalle in Model.Detalles)
+                                {
+                                    <tr>
+                                        <td>@detalle.NombreProducto</td>
+                                        <td>@detalle.Cantidad</td>
+                                        <td>$@((detalle.Cantidad * detalle.PrecioUnitario).ToString("N2"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-circle"></i> Advertencia</h5>
+                        <p>Al anular esta factura:</p>
+                        <ul>
+                            <li>Se marcará como anulada en el sistema</li>
+                            <li>No se podrá revertir esta acción</li>
+                            <li>Los productos volverán al inventario</li>
+                            <li>Se mantendrá un registro de la anulación</li>
+                        </ul>
+                    </div>
+
+                    <div class="card bg-light mt-3">
+                        <div class="card-body">
+                            <h6 class="card-title">Resumen Financiero</h6>
+                            <p class="mb-1">Subtotal: $@Model.Subtotal.ToString("N2")</p>
+                            <p class="mb-1">IVA (19%): $@Model.IVA.ToString("N2")</p>
+                            <hr class="my-2">
+                            <p class="fw-bold mb-0">Total: $@Model.Total.ToString("N2")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="IdFactura" />
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-ban"></i> Confirmar Anulación
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista
+                </a>
+            </form>
+        </div>
+    </div>
+</div> 

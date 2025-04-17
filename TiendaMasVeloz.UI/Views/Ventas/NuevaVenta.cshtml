@@ -1,0 +1,161 @@
+@model TiendaMasVeloz.BLL.DTOs.FacturaDTO
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using TiendaMasVeloz.BLL.DTOs
+
+@{
+    ViewData["Title"] = "Nueva Venta";
+    var clientesList = ViewBag.Clientes != null ? 
+        new SelectList(ViewBag.Clientes, "Id", "NombreCompleto") : 
+        new SelectList(new List<SelectListItem>());
+}
+
+<div class="container">
+    <h2>Nueva Venta</h2>
+    
+    <form asp-action="NuevaVenta" method="post">
+        <div class="form-group">
+            <label asp-for="IdCliente" class="control-label">Cliente</label>
+            <select asp-for="IdCliente" class="form-control" asp-items="clientesList">
+                <option value="">-- Seleccione un Cliente --</option>
+            </select>
+            <span asp-validation-for="IdCliente" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Fecha" class="control-label">Fecha</label>
+            <input asp-for="Fecha" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <span asp-validation-for="Fecha" class="text-danger"></span>
+        </div>
+
+        <div id="detalles-container">
+            <!-- Los detalles se agregarán dinámicamente -->
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="button" class="btn btn-secondary" id="agregarProducto">Agregar Producto</button>
+        </div>
+
+        <div class="form-group mt-3">
+            <label asp-for="Total" class="control-label">Total</label>
+            <input asp-for="Total" class="form-control" readonly />
+        </div>
+
+        <div class="form-group mt-3">
+            <input type="submit" value="Crear Venta" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
+        </div>
+    </form>
+
+    <div class="mt-5">
+        <h3>Ventas Recientes</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var venta in ViewBag.VentasRecientes ?? new List<FacturaDTO>())
+                    {
+                        <tr>
+                            <td>@venta.IdFactura</td>
+                            <td>@venta.NombreCliente</td>
+                            <td>@venta.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@venta.Total.ToString("C")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@venta.IdFactura" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Ver Detalles
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            let detalleIndex = 0;
+
+            $("#agregarProducto").click(function() {
+                const template = `
+                    <div class="row detalle-row mb-3">
+                        <div class="col-md-4">
+                            <select name="Detalles[${detalleIndex}].IdProducto" class="form-control producto-select" required>
+                                <option value="">-- Seleccione un Producto --</option>
+                                @foreach (var producto in (ViewBag.Productos ?? new List<dynamic>()))
+                                {
+                                    <option value="@producto.IdProducto" data-precio="@producto.PrecioVenta">@producto.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="Detalles[${detalleIndex}].Cantidad" class="form-control cantidad-input" min="1" value="1" required />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="Detalles[${detalleIndex}].PrecioUnitario" class="form-control precio-unitario" readonly />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="Detalles[${detalleIndex}].Subtotal" class="form-control subtotal" readonly />
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-danger btn-sm eliminar-detalle">Eliminar</button>
+                        </div>
+                    </div>
+                `;
+                
+                $("#detalles-container").append(template);
+                detalleIndex++;
+                actualizarEventos();
+            });
+
+            function actualizarEventos() {
+                $(".producto-select").off("change").on("change", function() {
+                    const row = $(this).closest(".detalle-row");
+                    const precio = $(this).find("option:selected").data("precio");
+                    const cantidad = row.find(".cantidad-input").val();
+                    
+                    row.find(".precio-unitario").val(precio);
+                    actualizarSubtotal(row);
+                });
+
+                $(".cantidad-input").off("change").on("change", function() {
+                    const row = $(this).closest(".detalle-row");
+                    actualizarSubtotal(row);
+                });
+
+                $(".eliminar-detalle").off("click").on("click", function() {
+                    $(this).closest(".detalle-row").remove();
+                    actualizarTotal();
+                });
+            }
+
+            function actualizarSubtotal(row) {
+                const precio = parseFloat(row.find(".precio-unitario").val()) || 0;
+                const cantidad = parseInt(row.find(".cantidad-input").val()) || 0;
+                const subtotal = precio * cantidad;
+                
+                row.find(".subtotal").val(subtotal.toFixed(2));
+                actualizarTotal();
+            }
+
+            function actualizarTotal() {
+                let total = 0;
+                $(".subtotal").each(function() {
+                    total += parseFloat($(this).val()) || 0;
+                });
+                $("#Total").val(total.toFixed(2));
+            }
+        });
+    </script>
+} 

@@ -1,0 +1,118 @@
+@model TiendaMasVeloz.BLL.DTOs.FacturaDTO
+
+@{
+    ViewData["Title"] = $"Factura #{Model.NumeroFactura}";
+    Layout = "_LayoutPrint"; // Asegúrate de tener este layout para impresión
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-6">
+            <h1 class="h2">Tienda Más Veloz</h1>
+            <p class="mb-1">Dirección de la Tienda</p>
+            <p class="mb-1">Ciudad, País</p>
+            <p class="mb-1">Teléfono: (123) 456-7890</p>
+            <p class="mb-0">Email: contacto@tiendamasveloz.com</p>
+        </div>
+        <div class="col-6 text-end">
+            <h2 class="h3 mb-4">FACTURA</h2>
+            <p class="mb-1"><strong>Número:</strong> #@Model.NumeroFactura</p>
+            <p class="mb-1"><strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
+            <div class="text-end mb-3">
+                <span class="badge bg-@(Model.Estado ? "success" : "danger")">
+                    @(Model.Estado ? "Activa" : "Anulada")
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row mb-4">
+        <div class="col-6">
+            <h5>Cliente</h5>
+            <p class="mb-1"><strong>Nombre:</strong> @Model.NombreCliente</p>
+            <p class="mb-1"><strong>Dirección:</strong> [Dirección del Cliente]</p>
+            <p class="mb-0"><strong>Teléfono:</strong> [Teléfono del Cliente]</p>
+        </div>
+        <div class="col-6">
+            <h5>Vendedor</h5>
+            <p class="mb-0"><strong>Nombre:</strong> @Model.NombreVendedor</p>
+        </div>
+    </div>
+
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col" class="text-center">Cantidad</th>
+                    <th scope="col" class="text-end">Precio Unit.</th>
+                    <th scope="col" class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detalle in Model.Detalles.Select((item, index) => new { Item = item, Index = index + 1 }))
+                {
+                    <tr>
+                        <td>@detalle.Index</td>
+                        <td>@detalle.Item.NombreProducto</td>
+                        <td class="text-center">@detalle.Item.Cantidad</td>
+                        <td class="text-end">$@detalle.Item.PrecioUnitario.ToString("N2")</td>
+                        <td class="text-end">$@((detalle.Item.Cantidad * detalle.Item.PrecioUnitario).ToString("N2"))</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
+                    <td class="text-end">$@Model.Subtotal.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-end"><strong>IVA (19%):</strong></td>
+                    <td class="text-end">$@Model.IVA.ToString("N2")</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="text-end"><strong>Total:</strong></td>
+                    <td class="text-end"><strong>$@Model.Total.ToString("N2")</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Términos y Condiciones</h5>
+                    <p class="card-text small">
+                        1. El pago debe realizarse en su totalidad al momento de la compra.<br>
+                        2. Los productos vendidos no tienen devolución.<br>
+                        3. La garantía de los productos está sujeta a las políticas del fabricante.<br>
+                        4. Esta factura es un documento válido para efectos fiscales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <p class="text-center mb-0">
+                <small>Esta factura ha sido generada electrónicamente por el sistema de Tienda Más Veloz</small>
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Buttons {
+    <div class="no-print mb-4">
+        <button onclick="window.print()" class="btn btn-primary">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a la Lista
+        </a>
+    </div>
+} 

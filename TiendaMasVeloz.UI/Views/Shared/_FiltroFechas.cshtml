@@ -1,0 +1,93 @@
+@model (DateTime? FechaInicio, DateTime? FechaFin)
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-calendar me-1"></i>
+        Filtros de Fecha
+    </div>
+    <div class="card-body">
+        <form id="filtroFechasForm" method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label for="FechaInicio" class="form-label">Fecha Inicio</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <input type="date" 
+                           class="form-control" 
+                           id="FechaInicio" 
+                           name="fechaInicio"
+                           value="@(Model.FechaInicio?.ToString("yyyy-MM-dd"))"
+                           max="@DateTime.Today.ToString("yyyy-MM-dd")">
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label for="FechaFin" class="form-label">Fecha Fin</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="fas fa-calendar-alt"></i>
+                    </span>
+                    <input type="date" 
+                           class="form-control" 
+                           id="FechaFin" 
+                           name="fechaFin"
+                           value="@(Model.FechaFin?.ToString("yyyy-MM-dd"))"
+                           max="@DateTime.Today.ToString("yyyy-MM-dd")">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search"></i> Filtrar
+                </button>
+            </div>
+        </form>
+
+        <div class="row mt-3">
+            <div class="col">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-secondary" onclick="aplicarFiltroRapido(7)">
+                        Última Semana
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="aplicarFiltroRapido(30)">
+                        Último Mes
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="aplicarFiltroRapido(90)">
+                        Último Trimestre
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="limpiarFiltros()">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function aplicarFiltroRapido(dias) {
+        const fechaFin = new Date();
+        const fechaInicio = new Date();
+        fechaInicio.setDate(fechaInicio.getDate() - dias);
+
+        document.getElementById('FechaInicio').value = fechaInicio.toISOString().split('T')[0];
+        document.getElementById('FechaFin').value = fechaFin.toISOString().split('T')[0];
+        document.getElementById('filtroFechasForm').submit();
+    }
+
+    function limpiarFiltros() {
+        document.getElementById('FechaInicio').value = '';
+        document.getElementById('FechaFin').value = '';
+        document.getElementById('filtroFechasForm').submit();
+    }
+
+    // Validación de fechas
+    document.getElementById('FechaInicio').addEventListener('change', function() {
+        const fechaInicio = this.value;
+        document.getElementById('FechaFin').min = fechaInicio;
+    });
+
+    document.getElementById('FechaFin').addEventListener('change', function() {
+        const fechaFin = this.value;
+        document.getElementById('FechaInicio').max = fechaFin;
+    });
+</script> 

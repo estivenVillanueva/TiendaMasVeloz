@@ -1,0 +1,104 @@
+@model IEnumerable<TiendaMasVeloz.BLL.DTOs.FacturaDTO>
+
+@{
+    ViewData["Title"] = "Reporte de Ventas";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Reporte de Ventas</h1>
+
+    @await Html.PartialAsync("_FiltroFechas", (ViewBag.FechaInicio as DateTime?, ViewBag.FechaFin as DateTime?))
+
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">
+                    <h4 class="mb-2">$@(((decimal)ViewBag.TotalVentas).ToString("N2"))</h4>
+                    <div class="small">Ventas Totales</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">
+                    <h4 class="mb-2">@ViewBag.FacturasActivas</h4>
+                    <div class="small">Facturas Activas</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">
+                    <h4 class="mb-2">@ViewBag.ProductosVendidos</h4>
+                    <div class="small">Productos Vendidos</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">
+                    <h4 class="mb-2">@ViewBag.FacturasAnuladas</h4>
+                    <div class="small">Facturas Anuladas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-xl-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Ventas por Día
+                </div>
+                <div class="card-body">
+                    <canvas id="ventasPorDia"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Datos para el gráfico de ventas por día
+            const ventasPorDia = @Html.Raw(Json.Serialize(Model
+                .Where(f => f.Estado)
+                .GroupBy(f => f.Fecha.Date)
+                .Select(g => new { 
+                    Fecha = g.Key.ToString("dd/MM/yyyy"),
+                    Total = g.Sum(f => f.Total)
+                })
+                .OrderBy(v => v.Fecha)));
+
+            new Chart(document.getElementById('ventasPorDia'), {
+                type: 'bar',
+                data: {
+                    labels: ventasPorDia.map(v => v.Fecha),
+                    datasets: [{
+                        label: 'Ventas Diarias',
+                        data: ventasPorDia.map(v => v.Total),
+                        backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+} 

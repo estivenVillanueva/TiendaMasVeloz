@@ -1,0 +1,87 @@
+@model TiendaMasVeloz.BLL.DTOs.ProductoDTO
+
+@{
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Detalles del Producto</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-box me-1"></i>
+            Información del Producto
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Nombre)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Nombre)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Descripcion)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Descripcion)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PrecioVenta)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.PrecioVenta)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Stock)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Stock)</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(model => model.CategoriaNombre)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.CategoriaNombre)</dd>
+
+                        <dt class="col-sm-4">Estado</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@(Model.Activo ? "success" : "danger")">
+                                @(Model.Activo ? "Activo" : "Inactivo")
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Estado del Stock</h5>
+                            <div class="progress mb-3">
+                                @{
+                                    var stockPercentage = Model.Stock >= 100 ? 100 : Model.Stock;
+                                    var progressClass = Model.Stock > 10 ? "bg-success" : (Model.Stock > 0 ? "bg-warning" : "bg-danger");
+                                }
+                                <div class="progress-bar @progressClass" role="progressbar" style="width: @stockPercentage%">
+                                    @Model.Stock unidades
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                @if (Model.Stock > 10)
+                                {
+                                    <span class="text-success">Stock suficiente</span>
+                                }
+                                else if (Model.Stock > 0)
+                                {
+                                    <span class="text-warning">Stock bajo</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Sin stock</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.IdProducto" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a asp-action="Stock" asp-route-id="@Model.IdProducto" class="btn btn-success">
+                    <i class="fas fa-boxes"></i> Gestionar Stock
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div> 

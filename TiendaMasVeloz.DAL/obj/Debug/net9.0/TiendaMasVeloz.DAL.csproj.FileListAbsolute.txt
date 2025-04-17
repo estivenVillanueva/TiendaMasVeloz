@@ -1,0 +1,12 @@
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\bin\Debug\net9.0\TiendaMasVeloz.DAL.deps.json
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\bin\Debug\net9.0\TiendaMasVeloz.DAL.dll
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\bin\Debug\net9.0\TiendaMasVeloz.DAL.pdb
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\TiendaMasVeloz.DAL.csproj.AssemblyReference.cache
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\TiendaMasVeloz.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\TiendaMasVeloz.DAL.AssemblyInfoInputs.cache
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\TiendaMasVeloz.DAL.AssemblyInfo.cs
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\TiendaMasVeloz.DAL.csproj.CoreCompileInputs.cache
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\TiendaMasVeloz.DAL.dll
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\refint\TiendaMasVeloz.DAL.dll
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\TiendaMasVeloz.DAL.pdb
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net9.0\ref\TiendaMasVeloz.DAL.dll

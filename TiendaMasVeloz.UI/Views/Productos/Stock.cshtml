@@ -1,0 +1,107 @@
+@model TiendaMasVeloz.BLL.DTOs.ProductoDTO
+
+@{
+    ViewData["Title"] = "Gestionar Stock";
+}
+
+<div class="container-fluid">
+    <h1 class="mt-4">Gestionar Stock</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-boxes me-1"></i>
+            Control de Stock - @Model.Nombre
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Producto:</dt>
+                        <dd class="col-sm-8">@Model.Nombre</dd>
+
+                        <dt class="col-sm-4">Categoría:</dt>
+                        <dd class="col-sm-8">@Model.CategoriaNombre</dd>
+
+                        <dt class="col-sm-4">Stock Actual:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@(Model.Stock > 10 ? "success" : (Model.Stock > 0 ? "warning" : "danger"))">
+                                @Model.Stock unidades
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Estado del Stock</h5>
+                            <div class="progress mb-3">
+                                @{
+                                    var stockPercentage = Model.Stock >= 100 ? 100 : Model.Stock;
+                                    var progressClass = Model.Stock > 10 ? "bg-success" : (Model.Stock > 0 ? "bg-warning" : "bg-danger");
+                                }
+                                <div class="progress-bar @progressClass" role="progressbar" style="width: @stockPercentage%">
+                                    @Model.Stock unidades
+                                </div>
+                            </div>
+                            <p class="card-text">
+                                @if (Model.Stock > 10)
+                                {
+                                    <span class="text-success">Stock suficiente</span>
+                                }
+                                else if (Model.Stock > 0)
+                                {
+                                    <span class="text-warning">Stock bajo</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Sin stock</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Actualizar Stock</h5>
+                            <form asp-action="ActualizarStock" method="post">
+                                <input type="hidden" name="id" value="@Model.IdProducto" />
+                                
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Nueva Cantidad</label>
+                                    <div class="input-group">
+                                        <input type="number" name="cantidad" class="form-control" min="0" value="@Model.Stock" required />
+                                        <span class="input-group-text">unidades</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Actualizar Stock
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-info">
+                        <h5><i class="fas fa-info-circle"></i> Información</h5>
+                        <p>El stock actual se actualizará al valor especificado.</p>
+                        <ul class="mb-0">
+                            <li>Stock bajo: menos de 10 unidades</li>
+                            <li>Stock suficiente: 10 o más unidades</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div> 
