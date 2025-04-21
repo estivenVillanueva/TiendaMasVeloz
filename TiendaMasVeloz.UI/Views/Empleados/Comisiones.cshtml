@@ -94,25 +94,37 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            function cargarComisiones() {
-                var mes = $('#mes').val();
-                var año = $('#año').val();
-                var empleadoId = @Model.IdEmpleado;
+            @if (Model != null)
+            {
+                <text>
+                function cargarComisiones() {
+                    var mes = $('#mes').val();
+                    var año = $('#año').val();
+                    var empleadoId = @Model.IdEmpleado;
 
-                $.get('/Empleados/GetComisiones', { id: empleadoId, mes: mes, año: año }, function (data) {
-                    $('#comisionesBody').empty();
-                    $('#comisionesBody').append(
-                        '<tr>' +
-                        '<td>' + $('#mes option:selected').text() + ' ' + año + '</td>' +
-                        '<td>$' + data.totalVentas.toFixed(2) + '</td>' +
-                        '<td>$' + data.comision.toFixed(2) + '</td>' +
-                        '</tr>'
-                    );
-                });
+                    $.get('/Empleados/GetComisiones', { id: empleadoId, mes: mes, año: año }, function (data) {
+                        $('#comisionesBody').empty();
+                        $('#comisionesBody').append(
+                            '<tr>' +
+                            '<td>' + $('#mes option:selected').text() + ' ' + año + '</td>' +
+                            '<td>$' + data.totalVentas.toFixed(2) + '</td>' +
+                            '<td>$' + data.comision.toFixed(2) + '</td>' +
+                            '</tr>'
+                        );
+                    });
+                }
+
+                $('#mes, #año').change(cargarComisiones);
+                cargarComisiones();
+                </text>
             }
-
-            $('#mes, #año').change(cargarComisiones);
-            cargarComisiones();
+            else
+            {
+                <text>
+                console.error('No se pudo cargar la información del empleado');
+                alert('Error: No se pudo cargar la información del empleado');
+                </text>
+            }
         });
     </script>
 } 

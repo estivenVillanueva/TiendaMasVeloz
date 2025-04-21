@@ -437,11 +437,12 @@ namespace TiendaMasVeloz.BLL.Services
 
         public async Task<decimal> GetTotalVentasPorEmpleadoAsync(int empleadoId, int mes, int año)
         {
-            var facturas = await _unitOfWork.Repository<Factura>()
-                .FindAsync(f => f.IdEmpleado == empleadoId && 
-                               f.Fecha.Month == mes && 
-                               f.Fecha.Year == año);
-            return facturas.Sum(f => f.Total);
+            return await _context.Facturas
+                .Where(f => f.IdEmpleado == empleadoId && 
+                           f.Fecha.Month == mes && 
+                           f.Fecha.Year == año &&
+                           f.Estado == true) // Solo considerar facturas activas
+                .SumAsync(f => f.Total);
         }
 
         public async Task<decimal> GetTotalVentasPorClienteAsync(int clienteId, int mes, int año)

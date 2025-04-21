@@ -4,16 +4,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TiendaMasVeloz.BLL.DTOs;
 using TiendaMasVeloz.BLL.Interfaces;
+using TiendaMasVeloz.BLL.Contracts;
 
 namespace TiendaMasVeloz.UI.Controllers
 {
     public class EmpleadosController : Controller
     {
         private readonly IEmpleadoService _empleadoService;
+        private readonly IFacturaService _facturaService;
 
-        public EmpleadosController(IEmpleadoService empleadoService)
+        public EmpleadosController(IEmpleadoService empleadoService, IFacturaService facturaService)
         {
             _empleadoService = empleadoService;
+            _facturaService = facturaService;
         }
 
         // GET: Empleados
@@ -125,15 +128,53 @@ namespace TiendaMasVeloz.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _empleadoService.DeleteEmpleadoAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _empleadoService.DeleteEmpleadoAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                // Si el empleado tiene facturas asociadas, en lugar de eliminarlo lo marcamos como inactivo
+                var empleado = await _empleadoService.GetEmpleadoByIdAsync(id);
+                if (empleado != null)
+                {
+                    empleado.Activo = false;
+                    await _empleadoService.UpdateEmpleadoAsync(id, empleado);
+                }
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: Empleados/Comisiones
-        public async Task<IActionResult> Comisiones(int id, int mes, int año)
+        public async Task<IActionResult> Comisiones(int id)
         {
-            // Implementación pendiente
-            return View();
+            var empleado = await _empleadoService.GetEmpleadoByIdAsync(id);
+            if (empleado == null)
+            {
+                return NotFound();
+            }
+            return View(empleado);
+        }
+
+        // GET: Empleados/GetComisiones
+        [HttpGet]
+        public async Task<IActionResult> GetComisiones(int id, int mes, int año)
+        {
+            try
+            {
+                // Obtener el total de ventas del empleado para el mes y año especificados
+                var totalVentas = await _facturaService.GetTotalVentasPorEmpleadoAsync(id, mes, año);
+                
+                // Calcular la comisión (5% del total de ventas)
+                var comision = totalVentas * 0.05m;
+
+                return Json(new { totalVentas, comision });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 } 

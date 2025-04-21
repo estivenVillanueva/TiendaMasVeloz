@@ -1,0 +1,63 @@
+@model IEnumerable<TiendaMasVeloz.BLL.DTOs.ProveedorDTO>
+
+@{
+    ViewData["Title"] = "Proveedores";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Proveedores</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a asp-action="Create" class="btn btn-primary">Nuevo Proveedor</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                            <th>@Html.DisplayNameFor(model => model.Contacto)</th>
+                            <th>@Html.DisplayNameFor(model => model.Telefono)</th>
+                            <th>@Html.DisplayNameFor(model => model.Direccion)</th>
+                            <th>@Html.DisplayNameFor(model => model.Activo)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Contacto)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Direccion)</td>
+                                <td>@(item.Activo ? "Sí" : "No")</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                }
+            });
+        });
+    </script>
+} 

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TiendaMasVeloz.UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f38b1cb9272599fe0e49e23f6eb32a8f9898cd17")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14ec364ec48f9d10715427aead1a1bb584da8930")]
 [assembly: System.Reflection.AssemblyProductAttribute("TiendaMasVeloz.UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TiendaMasVeloz.UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

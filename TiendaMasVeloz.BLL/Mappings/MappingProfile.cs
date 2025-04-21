@@ -51,6 +51,8 @@ namespace TiendaMasVeloz.BLL.Mappings
             CreateMap<NuevoDetalleFacturaDTO, DetalleFactura>();
 
             CreateMap<Categoria, CategoriaDTO>().ReverseMap();
+
+            CreateMap<Proveedor, ProveedorDTO>().ReverseMap();
         }
     }
 } 
