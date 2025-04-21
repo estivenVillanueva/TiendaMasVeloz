@@ -12,6 +12,7 @@ namespace TiendaMasVeloz.BLL.Contracts
         Task<FacturaDTO> CrearAsync(FacturaDTO factura);
         Task<FacturaDTO?> ActualizarAsync(int id, FacturaDTO factura);
         Task<bool> AnularAsync(int id);
+        Task<bool> EliminarAsync(int id);
         Task<IEnumerable<FacturaDTO>> ObtenerPorRangoFechasAsync(DateTime fechaInicio, DateTime fechaFin);
         Task<IEnumerable<FacturaDTO>> GetAllFacturasAsync();
         Task<FacturaDTO?> GetFacturaByIdAsync(int id);

@@ -161,6 +161,7 @@ C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.U
 C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\TiendaMasVeloz.UI.pdb
 C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\TiendaMasVeloz.UI.genruntimeconfig.cache
 C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\ref\TiendaMasVeloz.UI.dll
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\TiendaMasVeloz.UI.sourcelink.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\bin\Debug\net8.0\appsettings.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\bin\Debug\net8.0\TiendaMasVeloz.UI.staticwebassets.runtime.json
@@ -305,6 +306,7 @@ C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\n
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\TiendaMasVeloz.UI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\TiendaMasVeloz.UI.RazorAssemblyInfo.cache
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\TiendaMasVeloz.UI.RazorAssemblyInfo.cs
+C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\TiendaMasVeloz.UI.sourcelink.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.UI\obj\Debug\net8.0\staticwebassets\msbuild.TiendaMasVeloz.UI.Microsoft.AspNetCore.StaticWebAssets.props

@@ -12,6 +12,7 @@ C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.D
 C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.pdb
 C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.genruntimeconfig.cache
 C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\ref\TiendaMasVeloz.DAL.dll
+C:\Users\estiv\OneDrive\Escritorio\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.sourcelink.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\bin\Debug\net8.0\TiendaMasVeloz.DAL.deps.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\bin\Debug\net8.0\TiendaMasVeloz.DAL.runtimeconfig.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\bin\Debug\net8.0\TiendaMasVeloz.DAL.dll
@@ -21,6 +22,7 @@ C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.AssemblyInfoInputs.cache
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.AssemblyInfo.cs
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.csproj.CoreCompileInputs.cache
+C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.sourcelink.json
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.dll
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\refint\TiendaMasVeloz.DAL.dll
 C:\Users\SENA\Desktop\ProyectoEnCapasTiendMasVeloz\TiendaMasVeloz.DAL\obj\Debug\net8.0\TiendaMasVeloz.DAL.pdb

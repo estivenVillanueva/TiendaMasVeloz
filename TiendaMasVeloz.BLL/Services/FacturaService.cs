@@ -586,5 +586,41 @@ namespace TiendaMasVeloz.BLL.Services
 
             return await ObtenerPorIdAsync(id);
         }
+
+        public async Task<bool> EliminarAsync(int id)
+        {
+            try
+            {
+                var factura = await _context.Facturas
+                    .Include(f => f.Detalles)
+                    .FirstOrDefaultAsync(f => f.Id == id);
+
+                if (factura == null)
+                    return false;
+
+                // Restaurar el stock de los productos
+                foreach (var detalle in factura.Detalles)
+                {
+                    var producto = await _context.Productos.FindAsync(detalle.ProductoId);
+                    if (producto != null)
+                    {
+                        producto.Stock += detalle.Cantidad;
+                    }
+                }
+
+                // Eliminar los detalles primero
+                _context.DetalleFacturas.RemoveRange(factura.Detalles);
+                
+                // Eliminar la factura
+                _context.Facturas.Remove(factura);
+                
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

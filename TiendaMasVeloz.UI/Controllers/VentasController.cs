@@ -142,5 +142,98 @@ namespace TiendaMasVeloz.UI.Controllers
             var vendedores = await _facturaService.ObtenerMejoresVendedoresAsync();
             return PartialView("_ResumenMejoresVendedores", vendedores);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var factura = await _facturaService.ObtenerPorIdAsync(id);
+            if (factura == null)
+            {
+                return NotFound();
+            }
+
+            var productos = await _productoService.GetAllProductosAsync();
+            var clientes = await _clienteService.ObtenerTodosAsync();
+            
+            ViewBag.Productos = productos.Where(p => p.Activo).ToList();
+            ViewBag.Clientes = clientes.Where(c => c.Activo).ToList();
+            
+            return View(factura);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, FacturaDTO factura)
+        {
+            if (id != factura.IdFactura)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _facturaService.ActualizarAsync(id, factura);
+                    TempData["Success"] = "La venta ha sido actualizada correctamente.";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al actualizar la venta: " + ex.Message);
+                }
+            }
+
+            var productos = await _productoService.GetAllProductosAsync();
+            var clientes = await _clienteService.ObtenerTodosAsync();
+            
+            ViewBag.Productos = productos.Where(p => p.Activo).ToList();
+            ViewBag.Clientes = clientes.Where(c => c.Activo).ToList();
+            
+            return View(factura);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var factura = await _facturaService.ObtenerPorIdAsync(id);
+            if (factura == null)
+            {
+                return NotFound();
+            }
+            return View(factura);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                // Primero obtenemos la factura para verificar que existe
+                var factura = await _facturaService.ObtenerPorIdAsync(id);
+                if (factura == null)
+                {
+                    TempData["Error"] = "La venta no existe.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Intentamos eliminar la factura
+                var result = await _facturaService.EliminarAsync(id);
+                if (result)
+                {
+                    TempData["Success"] = "La venta ha sido eliminada correctamente.";
+                }
+                else
+                {
+                    TempData["Error"] = "No se pudo eliminar la venta.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Error al eliminar la venta: {ex.Message}";
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 } 

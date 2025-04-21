@@ -1,0 +1,52 @@
+@model TiendaMasVeloz.BLL.DTOs.FacturaDTO
+
+@{
+    ViewData["Title"] = "Anular Venta";
+}
+
+<div class="container mt-4">
+    <h2>Anular Venta</h2>
+    <div class="alert alert-warning">
+        <h4>¿Está seguro de que desea anular esta venta?</h4>
+        <p>Esta acción no se puede deshacer.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Detalles de la Venta</h5>
+            <dl class="row">
+                <dt class="col-sm-3">Número de Factura</dt>
+                <dd class="col-sm-9">@Model.NumeroFactura</dd>
+
+                <dt class="col-sm-3">Fecha</dt>
+                <dd class="col-sm-9">@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                <dt class="col-sm-3">Cliente</dt>
+                <dd class="col-sm-9">@Model.NombreCliente</dd>
+
+                <dt class="col-sm-3">Total</dt>
+                <dd class="col-sm-9">@Model.Total.ToString("C")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="IdFactura" />
+            @Html.AntiForgeryToken()
+            
+            <div class="btn-group">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i> Confirmar Anulación
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
